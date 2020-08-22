@@ -91,4 +91,4 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'FM-TH-Web-$(environment)'
               packageForLinux: '$(Pipeline.Workspace)/webapp/FM.TreasureHunt.Web.zip'
-              AppSettings: '-AppDataContainer:StorageConnectionString "$(appdata_storage_connection)"'
+              AppSettings: '-AppDataContainer:StorageConnectionString "$(appdata_storage_connection)" -ConnectionStrings:DefaultConnection "$(ConnectionStrings:DefaultConnection)"'
