@@ -89,6 +89,6 @@ stages:
               azureSubscription: 'Personal-Pay-As-You-Go'
               WebAppName: 'FM-TreasureHunt-WebApp-$(environment)'
               deployToSlotOrASE: true
-              ResourceGroupName: 'FM-TreasureHunt-Web-$(environment)'
+              ResourceGroupName: 'FM-TH-Web-$(environment)'
               packageForLinux: '$(Pipeline.Workspace)/webapp/FM.TreasureHunt.Web.zip'
               AppSettings: '-AppDataContainer:StorageConnectionString "$(appdata_storage_connection)"'
