@@ -1,0 +1,27 @@
+﻿@model FM.TreasureHunt.Web.ViewModels.RegisterFindViewModel
+
+@{
+    ViewData["Title"] = "Register Find";
+}
+
+<h1>Register Your Treasure Find</h1>
+
+<row class="row">
+
+    <div class="container-fluid">
+
+        <form asp-action="RegisterFind">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ReferenceNumber" class="control-label"></label>
+                <input asp-for="ReferenceNumber" class="form-control"/>
+                <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Register Treasure Find</button>
+            </div>
+        </form>
+
+    </div>
+
+</row>

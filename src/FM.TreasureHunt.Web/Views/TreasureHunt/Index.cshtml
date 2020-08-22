@@ -1,0 +1,45 @@
+﻿@model List<TreasureFind>
+
+@{
+    ViewData["Title"] = "Your Finds";
+}
+
+<row class="row">
+
+    <div class="col-4">
+        <div class="container-fluid">
+            <h2>
+                Your Finds
+            </h2>
+
+            <table class="table table-responsive">
+                <thead>
+                <tr>
+                    <th>
+                        Treasure Name
+                    </th>
+                    <th>
+                        Found Date
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @foreach (var treasure in Model)
+                {
+                    <tr>
+                        <td>
+                            @treasure.Treasure.FriendlyName
+                        </td>
+                        <td>
+                            @treasure.DateFound
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</row>

@@ -1,8 +1,110 @@
-﻿@{
+﻿@model FM.TreasureHunt.Web.ViewModels.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<row class="row">
+    <div class="text-center">
+        <h1 class="display-4">Welcome to the MikZzona Treasure Hunt!</h1>
+    </div>
+</row>
+
+<row class="row">
+
+    <div class="col-4">
+        <div class="container-fluid">
+            <h2>
+                Treasure Find Stats
+            </h2>
+
+            <table class="table table-responsive">
+                <thead>
+                <tr>
+                    <th>
+                        Treasure Name
+                    </th>
+                    <th>
+                        Find Count
+                    </th>
+                    <th>
+                        Last Found
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @foreach (var treasure in Model.Treasures)
+                {
+                    <tr>
+                        <td>
+                            @treasure.FriendlyName
+                        </td>
+                        <td>
+                            @treasure.FoundCount
+                        </td>
+                        <td>
+                            @treasure.LastFound
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="container-fluid">
+            <h2>
+                User Scores
+            </h2>
+
+            <table class="table table-responsive">
+                <thead>
+                <tr>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Score
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @foreach (var treasure in Model.UserScoreDtos)
+                {
+                    <tr>
+                        <td>
+                            @treasure.Username
+                        </td>
+                        <td>
+                            @treasure.Score
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="container-fluid">
+            <h2>
+                Found a Poster?
+            </h2>
+
+            <p>
+                Scan the QR code using your phone or @Html.ActionLink("Register Treasure Find", "RegisterFind", "TreasureHunt").
+            </p>
+
+            <p>
+                If you do not already have an account and are logged in then you will be prompted to do so.
+            </p>
+
+        </div>
+    </div>
+
+</row>

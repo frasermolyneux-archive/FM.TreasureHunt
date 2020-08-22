@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FM.TreasureHunt.Web.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +10,8 @@ namespace FM.TreasureHunt.Web.Data
             : base(options)
         {
         }
+
+        public virtual DbSet<Treasure> Treasures { get; set; }
+        public virtual DbSet<TreasureFind> TreasureFinds { get; set; }
     }
 }

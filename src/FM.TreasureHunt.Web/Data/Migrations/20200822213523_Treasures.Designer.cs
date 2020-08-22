@@ -4,14 +4,16 @@ using FM.TreasureHunt.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FM.TreasureHunt.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200822213523_Treasures")]
+    partial class Treasures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,30 +39,6 @@ namespace FM.TreasureHunt.Web.Data.Migrations
                     b.HasKey("TreasureId");
 
                     b.ToTable("Treasures");
-                });
-
-            modelBuilder.Entity("FM.TreasureHunt.Web.Models.TreasureFind", b =>
-                {
-                    b.Property<Guid>("TreasureFindId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateFound")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("TreasureId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TreasureFindId");
-
-                    b.HasIndex("TreasureId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TreasureFinds");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -261,17 +239,6 @@ namespace FM.TreasureHunt.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("FM.TreasureHunt.Web.Models.TreasureFind", b =>
-                {
-                    b.HasOne("FM.TreasureHunt.Web.Models.Treasure", "Treasure")
-                        .WithMany()
-                        .HasForeignKey("TreasureId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

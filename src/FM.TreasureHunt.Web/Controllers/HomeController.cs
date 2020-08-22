@@ -3,24 +3,44 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using FM.TreasureHunt.Web.Data;
+using FM.TreasureHunt.Web.Dto;
+using FM.TreasureHunt.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using FM.TreasureHunt.Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FM.TreasureHunt.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new HomeViewModel
+            {
+                Treasures = await _context.Treasures.OrderByDescending(t => t.FoundCount).ToListAsync(),
+                UserScoreDtos = new List<UserScoreDto>()
+            };
+
+            foreach (var identityUser in _context.Users)
+            {
+                var score = await _context.TreasureFinds.Where(tf => tf.User == identityUser).CountAsync();
+                model.UserScoreDtos.Add(new UserScoreDto
+                {
+                    Username = identityUser.UserName,
+                    Score = score
+                });
+            }
+
+            model.UserScoreDtos = model.UserScoreDtos.OrderByDescending(us => us.Score).ToList();
+
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -31,7 +51,7 @@ namespace FM.TreasureHunt.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }

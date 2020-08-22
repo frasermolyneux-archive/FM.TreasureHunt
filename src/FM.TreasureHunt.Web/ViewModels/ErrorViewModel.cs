@@ -1,6 +1,4 @@
-using System;
-
-namespace FM.TreasureHunt.Web.Models
+namespace FM.TreasureHunt.Web.ViewModels
 {
     public class ErrorViewModel
     {
