@@ -1,0 +1,78 @@
+trigger:
+  branches:
+    include:
+    - '*'
+
+variables:
+  AzTerraformRegion: 'uksouth'
+  AzTerraformResourceGroup: 'FM-TreasureHunt-Web-Terraform'
+  AzTerraformStorageAccount: 'fm-treasurehunt'
+
+stages:
+- stage: build
+  jobs:
+  - job: build
+    pool:
+      vmImage: 'windows-latest'
+
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+    steps:
+    - task: NuGetToolInstaller@1
+
+    - task: NuGetCommand@2
+      inputs:
+          command: 'restore'
+          feedsToUse: 'config'
+          restoreSolution: '$(solution)'
+          nugetConfigPath: './src/nuget.config'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/webapp"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: CopyFiles@2
+      displayName: 'Copy terraform folder into staging directory'
+      inputs: 
+        SourceFolder: '$(Build.sourcesDirectory)/terraform'
+        Contents: '**'
+        TargetFolder: '$(Build.artifactStagingDirectory)/terraform'
+
+    - publish: $(Build.artifactStagingDirectory)/terraform
+      displayName: Publish terraform artifact
+      artifact: terraform
+
+    - publish: '$(Build.artifactStagingDirectory)/webapp'
+      displayName: 'Publish website source artifact'
+      artifact: webapp
+
+- stage: pre_deploy
+  jobs:
+  - job: create_terraform_backend
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+    - checkout: none
+      displayName: 'Skip checking out source'
+
+    - task: AzureCLI@1
+      displayName: 'Create terraform backend in Azure storage'
+      inputs:
+        azureSubscription: 'FM-Pay-As-You-Go'
+        scriptLocation: inlineScript
+        inlineScript: |
+          call az group create --location "$(AzTerraformRegion)" --name "$(AzTerraformResourceGroup)"
+          call az storage account create --name "$(AzTerraformStorageAccount)" --resource-group "$(AzTerraformResourceGroup)" --location "$(AzTerraformRegion)" --sku "Standard_LRS"
+          call az storage container create --name "terraform" --account-name "$(AzTerraformStorageAccount)"
+
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  - template: deploy-application.yml
+    parameters:
+      environment: 'mikzzona'
