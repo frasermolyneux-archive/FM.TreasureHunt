@@ -35,7 +35,7 @@ stages:
             displayName: 'Terraform: azurerm init'
             inputs:
               workingDirectory: '$(Pipeline.Workspace)/terraform'
-              backendServiceArm: 'FM-Pay-As-You-Go'
+              backendServiceArm: 'Personal-Pay-As-You-Go'
               backendAzureRmResourceGroupName: '$(AzTerraformResourceGroup)'
               backendAzureRmStorageAccountName: '$(AzTerraformStorageAccount)'
               backendAzureRmContainerName: terraform
@@ -47,7 +47,7 @@ stages:
               command: plan
               workingDirectory: '$(Pipeline.Workspace)/terraform'
               commandOptions: '-var="environment=$(environment)"'
-              environmentServiceNameAzureRM: 'FM-Pay-As-You-Go'
+              environmentServiceNameAzureRM: 'Personal-Pay-As-You-Go'
 
           - task: TerraformTaskV1@0
             name: terraform_validate_and_apply
@@ -56,7 +56,7 @@ stages:
               command: apply
               workingDirectory: '$(Pipeline.Workspace)/terraform'
               commandOptions: '-var="environment=$(environment)"'
-              environmentServiceNameAzureRM: 'FM-Pay-As-You-Go'
+              environmentServiceNameAzureRM: 'Personal-Pay-As-You-Go'
 
           - powershell: |
               $terraformOutput = Get-Content "$(terraform_validate_and_apply.jsonOutputVariablesPath)" | ConvertFrom-Json
@@ -86,7 +86,7 @@ stages:
           - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy: FM-TreasureHunt-WebApp-$(environment)'
             inputs:
-              azureSubscription: 'FM-Pay-As-You-Go'
+              azureSubscription: 'Personal-Pay-As-You-Go'
               WebAppName: 'FM-TreasureHunt-WebApp-$(environment)'
               deployToSlotOrASE: true
               ResourceGroupName: 'FM-TreasureHunt-Web-$(environment)'

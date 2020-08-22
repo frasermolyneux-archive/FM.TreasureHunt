@@ -65,7 +65,7 @@ stages:
     - task: AzureCLI@1
       displayName: 'Create terraform backend in Azure storage'
       inputs:
-        azureSubscription: 'FM-Pay-As-You-Go'
+        azureSubscription: 'Personal-Pay-As-You-Go'
         scriptLocation: inlineScript
         inlineScript: |
           call az group create --location "$(AzTerraformRegion)" --name "$(AzTerraformResourceGroup)"
