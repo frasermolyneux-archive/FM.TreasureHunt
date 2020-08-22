@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "resource-group" {
-    name = "FM-TreasureHunt-Web-${var.environment}"
+    name = "FM-TH-Web-${var.environment}"
     location = var.region
 }
 

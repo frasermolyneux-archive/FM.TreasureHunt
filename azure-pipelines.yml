@@ -5,7 +5,7 @@ trigger:
 
 variables:
   AzTerraformRegion: 'uksouth'
-  AzTerraformResourceGroup: 'FM-TreasureHunt-Web-Terraform'
+  AzTerraformResourceGroup: 'FM-TH-Web-Terraform'
   AzTerraformStorageAccount: 'fm-treasurehunt'
 
 stages:
