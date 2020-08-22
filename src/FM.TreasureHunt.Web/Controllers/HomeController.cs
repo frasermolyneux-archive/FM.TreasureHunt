@@ -28,7 +28,8 @@ namespace FM.TreasureHunt.Web.Controllers
                 UserScoreDtos = new List<UserScoreDto>()
             };
 
-            foreach (var identityUser in _context.Users)
+            var users = await _context.Users.ToListAsync();
+            foreach (var identityUser in users)
             {
                 var score = await _context.TreasureFinds.Where(tf => tf.User == identityUser).CountAsync();
                 model.UserScoreDtos.Add(new UserScoreDto
